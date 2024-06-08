@@ -28,15 +28,13 @@ crypto_scraper/
 
 
 
-                                         #create a new Django project and app:
-                                         #bash
 django-admin startproject crypto_scraper
 cd crypto_scraper
 django-admin startapp api               
                                          
                                         
-                                                                                                    #bash
-pip install djangorestframework celery requests selenium                                            # Install Required Libraries Ensure you have the required libraries installed:
+                                                                                                    
+pip install djangorestframework celery requests selenium                                            
 
 
 python
@@ -45,19 +43,18 @@ INSTALLED_APPS = [
     ...
     'rest_framework',
     'api',
-]                                                                                                   #Configure Django Settings
+]                                                                                                   
 Configure Celery in settings.py:
-                                                                                                    #Modify your settings.py to include rest_framework and api in the INSTALLED_APPS:
+                                                                                                    
 
-                                                                                                    #python
+                                                                                                   
 # Celery configuration
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 
-                                                                                                    #python
-from __future__ import absolute_import, unicode_literals                                            #Set Up Celery Create a celery.py in your project directory (crypto_scraper/):
-import os
+                                                                                                    
+from __future__ import absolute_import, unicode_literals                                            
 from celery import Celery
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'crypto_scraper.settings')
@@ -68,16 +65,16 @@ app.autodiscover_tasks()
                                                                                         
 
                                                                                       
-from .celery import app as celery_app                                                                #python,
-__all__ = ('celery_app',)                                                                            #In __init__.py of your project directory (crypto_scraper/), add:
+from .celery import app as celery_app                                                                
+__all__ = ('celery_app',)                                                                            
 
 
 
 
 from celery import shared_task
 import requests
-from selenium import webdriver                                                                       #python
-from selenium.webdriver.chrome.service import Service                                                #Create the Celery Task In your api app, create a file tasks.py and add the scraping logic:
+from selenium import webdriver                                                                       
+from selenium.webdriver.chrome.service import Service                                                
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -103,8 +100,8 @@ def fetch_crypto_data(coin_acronyms):
     return data
 
 
-from rest_framework.views import APIView                                                           #python
-from rest_framework.response import Response                                                       # Create the API View In api/views.py, create the view to handle the API requests:
+from rest_framework.views import APIView
+from rest_framework.response import Response                                                       
 
 from rest_framework import status
 from .tasks import fetch_crypto_data
@@ -132,14 +129,14 @@ class CryptoDataView(APIView):
 
 
 
-from django.urls import path                                                                 #python
-from .views import CryptoDataView                                                            #Create URLs
+from django.urls import path                                                                 
+from .views import CryptoDataView                                                            
 
 urlpatterns = [
     path('crypto/', CryptoDataView.as_view(), name='crypto-data')
 ]
 
-from django.contrib import admin                                                        #Include these URLs in main urls.py.
+from django.contrib import admin                                                        
 
 from django.urls import path, include
 
@@ -149,8 +146,7 @@ urlpatterns = [
 ]
 
 
-python manage.py runserver                                                              #bash
-                                                                                        #Running the Project Run the Django development server.
-celery -A crypto_scraper worker --loglevel=infoRun                                      #Celery worker in a separate terminal:
+python manage.py runserver                                                                                                                                                                                                   
+celery -A crypto_scraper worker --loglevel=infoRun                                  
 
                                                            -----END------
