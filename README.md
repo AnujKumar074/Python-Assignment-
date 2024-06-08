@@ -30,15 +30,15 @@ crypto_scraper/
 
 django-admin startproject crypto_scraper
 cd crypto_scraper
-django-admin startapp api               
+django-admin startapp api (bash)              
                                          
                                         
                                                                                                     
 pip install djangorestframework celery requests selenium                                            
+(bash)
 
+(python)
 
-python
-Copy code
 INSTALLED_APPS = [
     ...
     'rest_framework',
@@ -47,7 +47,7 @@ INSTALLED_APPS = [
 Configure Celery in settings.py:
                                                                                                     
 
-                                                                                                   
+ (python)                                                                                                  
 # Celery configuration
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
@@ -70,7 +70,7 @@ __all__ = ('celery_app',)
 
 
 
-
+(pyhton)
 from celery import shared_task
 import requests
 from selenium import webdriver                                                                       
@@ -126,6 +126,7 @@ class CryptoDataView(APIView):
             return Response(result.result, status=status.HTTP_200_OK)
         else:
             return Response({"status": result.state}, status=status.HTTP_202_ACCEPTED)
+            (python)
 
 
 
@@ -143,10 +144,10 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
-]
+] (python)
 
 
 python manage.py runserver                                                                                                                                                                                                   
-celery -A crypto_scraper worker --loglevel=infoRun                                  
+celery -A crypto_scraper worker --loglevel=infoRun  (bash)                                
 
                                                            -----END------
